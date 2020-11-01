@@ -1,0 +1,58 @@
+from googletrans import Translator
+from word2number.w2n import word_to_num
+from num2words import num2words
+from word2number import w2n
+
+translator = Translator()
+
+
+def translate_in_russian(word):
+    return translator.translate(word, src='en', dest='ru').text
+
+
+def translate_in_english(word):
+    return translator.translate(word, src='ru', dest='en').text
+
+
+def num2word(number):
+    return num2words(number)
+
+
+def word2num(word):
+    return w2n.word_to_num(word)
+
+
+def main():
+    answer = 0
+    print('перед и после операции ставить два пробела')
+    print('Введите выражение: ', end="")
+    first_value, znak, second_value = input().split('  ')
+    first_value = str(first_value)
+    znak = str(znak)
+    second_value = str(second_value)
+    dictionary = {1: first_value, 2: znak, 3: second_value}
+
+    first_value_to_int = dictionary.get(1)
+    second_value_to_int = dictionary.get(3)
+
+    first_value_to_int = translate_in_english(first_value_to_int)
+    first_value_to_int = word_to_num(first_value_to_int)  # теперь первая переменная - число
+
+    second_value_to_int = translate_in_english(second_value_to_int)
+    second_value_to_int = word_to_num(second_value_to_int)  # теперь вторая переменная - число
+
+    if dictionary[2] == 'плюс':
+        answer = first_value_to_int + second_value_to_int
+    elif dictionary[2] == 'минус':
+        answer = first_value_to_int - second_value_to_int
+    elif dictionary[2] == 'умножить':
+        answer = first_value_to_int * second_value_to_int
+    elif dictionary[2] == 'делить':
+        answer = first_value_to_int // second_value_to_int
+
+    answer = num2word(answer)
+    answer = translate_in_russian(answer)
+    print("Ответ --> " + answer)
+
+
+main()
